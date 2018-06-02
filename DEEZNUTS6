@@ -4,24 +4,24 @@
 #Device: Xperia XZ
 #Codename: Deeznuts
 #Build Status: Stable
-#Last Updated: 6/09/2017
+#Last Updated: 6/22/2017
 #Notes: THIS IS THE BEST THUS FAR
 #TWEAKS_BEGIN
 echo ""
 echo '*************************'
 echo PSA:
 echo this governor has standed the test of time
-echo can get up to 12 hrs SOT
+echo can get up to 14 hrs SOT
 echo '*************************'
 echo ------------------------------------------------------------
-echo Applying 'Deeznuts'
+echo Applying 'DEEZNUTS'
 echo Advanced Kernel Settings
 echo ------------------------------------------------------------
 echo Settings By: smacksmack206
 echo "Device: Xperia XZ"
 echo Codename: 'Deeznuts'
-echo Build Status: STABLE
-echo Last Updated: 6/06/2017
+echo Build Status: 6.BETA
+echo Last Updated: 6/22/2017
 echo 
 echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 echo Checking Android version...
@@ -45,6 +45,17 @@ sleep 0.1
 #Apply settings to LITTLE cluster
 echo Applying settings to LITTLE Cluster...
 sleep 0.2
+chmod 0777 /sys/devices/system/cpu/cpu0/core_ctl/*
+echo "40" > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
+echo "35" > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
+echo 1 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
+chmod 0644 /sys/devices/system/cpu/cpu0/core_ctl/*
+sleep 0.1
+chmod 0777 /sys/devices/system/cpu/cpu0/core_ctl/*
+echo "0" > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
+echo "0" > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
+echo 2 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
+chmod 0644 /sys/devices/system/cpu/cpu0/core_ctl/*
 #Temporarily change permissions to governor files for the LITTLE cluster to enable Interactive governor
 chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo interactive > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
@@ -57,8 +68,9 @@ chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 echo 1593600 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq     #Core 0 Maximum Frequency = 1593MHz         
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-echo 98 307200:99 480000:70 556800:85 652800:89 729600:99 844800:87 960000:99 1036800:38 1228800:99999 1593600:0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 
+echo 98 307200:99 480000:56 556800:70 652800:70 729600:99 844800:00 960000:9999 1036800:00 1228800:00 1593600:00 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+
 
 #Duality Kernel and Androplus will no longer support oc
 #in favour of Energy Aware Scheduler
@@ -68,7 +80,7 @@ chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
 echo 145000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack
 echo 307200 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
 echo 86666 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
-echo 90 307200:90000 480000:50 729600:9999 844800:950 960000:90 1036800:9999 1228800:9990 1478400:2 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+echo 90 307200:990 480000:99 729600:99 844800:90 960000:999 1036800:00 1228800:00 1478400:00 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
 echo 155 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
 echo 24000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
 echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
@@ -86,6 +98,18 @@ if [ -e "/sys/devices/system/cpu/cpu0/cpufreq/interactive/enable_prediction" ]; 
 fi
 #Apply settings to Big cluster
 echo Applying settings to BIG Cluster
+sleep 0.2
+chmod 0777 /sys/devices/system/cpu/cpu2/core_ctl/*
+echo "40" > /sys/devices/system/cpu/cpu2/core_ctl/busy_up_thres
+echo "35" > /sys/devices/system/cpu/cpu2/core_ctl/busy_down_thres
+echo 1 > /sys/devices/system/cpu/cpu2/core_ctl/min_cpus
+chmod 0644 /sys/devices/system/cpu/cpu2/core_ctl/*
+sleep 0.1
+chmod 0777 /sys/devices/system/cpu/cpu2/core_ctl/*
+echo "0" > /sys/devices/system/cpu/cpu2/core_ctl/busy_up_thres
+echo "0" > /sys/devices/system/cpu/cpu2/core_ctl/busy_down_thres
+echo 2 > /sys/devices/system/cpu/cpu2/core_ctl/min_cpus
+chmod 0644 /sys/devices/system/cpu/cpu2/core_ctl/*
 #Temporarily change permissions to governor files for the LITTLE cluster to enable Interactive governor
 chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
 echo interactive > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
@@ -98,14 +122,14 @@ chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
 echo 2150400 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq     #Core 2 Maximum Frequency = 2150MHz         
 chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
 chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
-echo 05 307200:99 729600:96 844800:87 940800:90 1036800:99 1401600:999 1824000:04 2150400:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads 
+echo 05 307200:99 729600:96 844800:997 940800:99 1036800:96 1401600:99 1824000:00 2150400:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads 
 chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
 chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
 #Tweak Interactive Governor
 echo 160000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_slack
 echo 307200 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
 echo 110000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_rate
-echo 35000 307200:9999 729600:90 940800:99990 1248000:00 1401600:00 1632000:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
+echo 35000 307200:99 729600:90 940800:99 1113600:999 1248000:01 1401600:99 1632000:01 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
 echo 400 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
 echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
 echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/max_freq_hysteresis
@@ -147,10 +171,10 @@ fi
 #Enable Core Control and Disable MSM Thermal Throttling allowing for longer sustained performance
 echo Disabling Aggressive CPU Thermal Throttling
 if [ -e "/sys/module/msm_thermal/core_control/enabled" ]; then
-echo 0 > /sys/module/msm_thermal/core_control/enabled
+echo 1 > /sys/module/msm_thermal/core_control/enabled
 fi
 if [ -e "/sys/module/msm_thermal/parameters/enabled" ]; then
-echo Y > /sys/module/msm_thermal/parameters/enabled
+echo N > /sys/module/msm_thermal/parameters/enabled
 fi
 #Tweak HMP Scheduler to feed the Big cluster more tasks
 sleep 0.2
@@ -196,18 +220,44 @@ fi
 echo "=========================================="
 echo Tweaking other various Settings
 
+echo Applying google service fix..this might take a few secs
+#Google service drain fix
+find /data/data/*/cache/ -depth -mindepth 1 -exec rm -Rf {} \;
+find /data/data/*/*/cache/ -depth -mindepth 1 -exec rm -Rf {} \;
+find /data/data/*/*/*/*/cache/ -depth -mindepth 1 -exec rm -Rf {} \;
+rm -Rf /data/data/com.facebook.katana/files/video-cache/*
+su -c "pm enable com.google.android.gms/.update.SystemUpdateActivity"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService$ActiveReceiver"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService$Receiver"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService$SecretCodeReceiver"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateActivity"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdatePanoActivity"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateService"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateService$Receiver"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateService$SecretCodeReceiver"
 
-
-
-#Replaced with PDesire's values
 echo ·Memory Values
 echo '0' > /proc/sys/vm/laptop_mode
-echo '60' > /proc/sys/vm/overcommit_ratio
-echo '70' > /proc/sys/vm/vfs_cache_pressure
+echo '65' > /proc/sys/vm/overcommit_ratio
+echo '85' > /proc/sys/vm/vfs_cache_pressure
 echo '20' > /proc/sys/vm/dirty_ratio
 echo '10' > /proc/sys/vm/dirty_background_ratio
 echo '2000' > /proc/sys/vm/dirty_expire_centisecs
 echo '3000' > /proc/sys/vm/dirty_writeback_centisecs
+echo "8" > /proc/sys/vm/page-cluster;
+echo "64000" > /proc/sys/kernel/msgmni;
+echo "64000" > /proc/sys/kernel/msgmax;
+echo "10" > /proc/sys/fs/lease-break-time;
+echo "500,512000,64,2048" > /proc/sys/kernel/sem
+
+
+echo Applying I/O Scheduler
+echo noop > /sys/block/mmcblk0/queue/scheduler
+echo noop >/sys/block/mmcblk1/queue/scheduler
+echo 2048 > /sys/block/mmcblk0/bdi/read_ahead_kb
+echo 2048 > /sys/block/mmcblk0rpmb/bdi/read_ahead_kb
+
 if [ -e "/sys/module/lowmemorykiller/parameters/enable_adaptive_lmk" ]; then
 chmod 666 /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
 chown root /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
@@ -223,6 +273,7 @@ if [ -e "/sys/module/lowmemorykiller/parameters/minfree" ]; then
 else
 	echo ' *LMK cannot currently be modified on your Kernel* '
 fi
+
 echo ·TCP Values
 string=$(</proc/sys/net/ipv4/tcp_available_congestion_control);
 if [[ $string == *"westwood"* ]]
@@ -232,8 +283,6 @@ else
 	echo Westwood not avilable, using Cubic
 	echo cubic > /proc/sys/net/ipv4/tcp_congestion_control 
 fi
-
-
 
 if [ -e "/sys/module/adreno_idler" ]; then
 	echo 'Y' > /sys/module/adreno_idler/parameters/adreno_idler_active
@@ -246,6 +295,7 @@ fi
 sleep 0.1
 echo GPU Tweaking
 echo simple_ondemand > /sys/devices/soc/b00000.qcom,kgsl-3d0/devfreq/b00000.qcom,kgsl-3d0/governor
+echo 315000000 > /sys/devices/soc/b00000.qcom,kgsl-3d0/devfreq/b00000.qcom,kgsl-3d0/max_freq
 
 #Tune Lazyplug	
 if [ -e "/sys/module/lazyplug" ]; then
@@ -255,9 +305,22 @@ if [ -e "/sys/module/lazyplug" ]; then
 else
 	echo ' Your Kernel Does not support Lazyplug '
 fi
+
+echo Applying FS-TRIM
+FS_LOGFILE=/data/fstrim.log
+
+echo "fstrim started at $( date +"%m-%d-%Y %H:%M:%S" )" | tee -a $FS_LOGFILE;
+
+fstrim -v /cache | tee -a $FS_LOGFILE;
+fstrim -v /data | tee -a $FS_LOGFILE;
+
+
+echo "fstrim finished at $( date +"%m-%d-%Y %H:%M:%S" )" | tee -a $FS_LOGFILE;
+
+
 echo ------------------------------------------------------------
-echo 'Deeznuts' Successfully Applied!
-echo "Deeznuts" > /data/system/current_profile
+echo 'DEEZNUTS' Successfully Applied!
+echo "DEEZNUTS" > /data/system/current_profile
 echo   You may now tweak them further
 echo    using EXKM or Kernel Adiutor
 echo ------------------------------------------------------------

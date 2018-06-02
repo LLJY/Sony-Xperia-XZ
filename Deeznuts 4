@@ -24,23 +24,6 @@ echo Build Status: STABLE
 echo Last Updated: 6/06/2017
 echo 
 echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-echo Checking Android version...
-if grep -q 'ro.build.version.sdk=25' /system/build.prop; then
-	echo Android Nougat 7.1.X detected!
-	sleep 0.1
-	echo N detected... Applying proper settings
-fi
-if grep -q 'ro.build.version.sdk=24' /system/build.prop; then
-	echo Android Nougat 7.0.X detected!
-	sleep 0.1
-	echo N detected... Applying proper settings
-fi
-if grep -q 'ro.build.version.sdk=23' /system/build.prop; then
-	echo Android Marshmallow 6.0.1 detected!
-	sleep 0.1
-	echo MM detected... Applying proper settings
-fi
-echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sleep 0.1
 #Apply settings to LITTLE cluster
 echo Applying settings to LITTLE Cluster...
@@ -57,7 +40,7 @@ chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 echo 1593600 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq     #Core 0 Maximum Frequency = 1593MHz         
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-echo 98 307200:99 480000:70 556800:85 652800:89 729600:99 844800:87 960000:99 1036800:38 1228800:99999 1593600:0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 
+echo 90 307200:99 480000:70 556800:85 652800:89 729600:99 844800:87 960000:99 1036800:8 1228800:99999 1593600:0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
 
 #Duality Kernel and Androplus will no longer support oc
@@ -98,14 +81,14 @@ chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
 echo 2150400 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq     #Core 2 Maximum Frequency = 2150MHz         
 chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
 chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
-echo 05 307200:99 729600:96 844800:87 940800:90 1036800:99 1401600:999 1824000:04 2150400:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads 
+echo 05 307200:99 729600:96 844800:87 940800:90 1036800:999 1401600:10 1824000:04 2150400:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads 
 chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
 chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
 #Tweak Interactive Governor
 echo 160000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_slack
 echo 307200 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
 echo 110000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_rate
-echo 35000 307200:9999 729600:90 940800:99990 1248000:00 1401600:00 1632000:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
+echo 35000 307200:9999 729600:90 940800:99999990 1248000:990 1401600:15 1632000:10 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
 echo 400 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
 echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
 echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/max_freq_hysteresis

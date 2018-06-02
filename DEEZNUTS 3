@@ -4,7 +4,7 @@
 #Device: Xperia XZ
 #Codename: Deeznuts
 #Build Status: Stable
-#Last Updated: 6/09/2017
+#Last Updated: 4/10/2017
 #Notes: THIS IS THE BEST THUS FAR
 #TWEAKS_BEGIN
 echo ""
@@ -21,30 +21,13 @@ echo Settings By: smacksmack206
 echo "Device: Xperia XZ"
 echo Codename: 'Deeznuts'
 echo Build Status: STABLE
-echo Last Updated: 6/06/2017
+echo Last Updated: 4/10/2017
 echo 
-echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-echo Checking Android version...
-if grep -q 'ro.build.version.sdk=25' /system/build.prop; then
-	echo Android Nougat 7.1.X detected!
-	sleep 0.1
-	echo N detected... Applying proper settings
-fi
-if grep -q 'ro.build.version.sdk=24' /system/build.prop; then
-	echo Android Nougat 7.0.X detected!
-	sleep 0.1
-	echo N detected... Applying proper settings
-fi
-if grep -q 'ro.build.version.sdk=23' /system/build.prop; then
-	echo Android Marshmallow 6.0.1 detected!
-	sleep 0.1
-	echo MM detected... Applying proper settings
-fi
 echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sleep 0.1
+sleep 0.3
 #Apply settings to LITTLE cluster
 echo Applying settings to LITTLE Cluster...
-sleep 0.2
+sleep 0.5
 #Temporarily change permissions to governor files for the LITTLE cluster to enable Interactive governor
 chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo interactive > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
@@ -57,7 +40,9 @@ chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 echo 1593600 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq     #Core 0 Maximum Frequency = 1593MHz         
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-echo 98 307200:99 480000:70 556800:85 652800:89 729600:99 844800:87 960000:99 1036800:38 1228800:99999 1593600:0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 
+#122880:96 to encourage little cluster to stay on higher frequency
+#1036800:9 to encourage little cluster to SKIP this frequency as it is inefficient
+echo 71 480000:70 556800:77 652800:79 729600:83 844800:87 960000:92 1036800:9 1228800:96 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
 
 #Duality Kernel and Androplus will no longer support oc
@@ -68,7 +53,7 @@ chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
 echo 145000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack
 echo 307200 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
 echo 86666 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
-echo 90 307200:90000 480000:50 729600:9999 844800:950 960000:90 1036800:9999 1228800:9990 1478400:2 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+echo 0 729600:175000 844800:95000 960000:185000 1228800:175000 1478400:120000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
 echo 155 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
 echo 24000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
 echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
@@ -98,14 +83,14 @@ chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
 echo 2150400 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq     #Core 2 Maximum Frequency = 2150MHz         
 chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
 chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
-echo 05 307200:99 729600:96 844800:87 940800:90 1036800:99 1401600:999 1824000:04 2150400:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads 
+echo 65 729600:75 844800:87 940800:80 1036800:99 1401600:97 1824000:99 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads 
 chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
 chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
 #Tweak Interactive Governor
 echo 160000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_slack
 echo 307200 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
 echo 110000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_rate
-echo 35000 307200:9999 729600:90 940800:99990 1248000:00 1401600:00 1632000:00 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
+echo 35000 729600:145000 940800:205000 1248000:175000 1401600:80000 1632000:180000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
 echo 400 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
 echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
 echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/max_freq_hysteresis
@@ -122,14 +107,9 @@ if [ -e "/sys/devices/system/cpu/cpu2/cpufreq/interactive/enable_prediction" ]; 
     echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/enable_prediction
 fi
 
-#Disable InputBoost
-echo Disabling InputBoost
-  if [ -e "/sys/module/cpu_boost/parameters/input_boost_freq" ]; then
-    chmod 644 /sys/module/cpu_boost/parameters/input_boost_freq
-    echo 0 > /sys/module/cpu_boost/parameters/input_boost_freq
-else
-    echo "*Not supported for your current Kernel*"
-fi
+
+
+
 
 #Disable TouchBoost
 echo Disabling TouchBoost
@@ -147,13 +127,13 @@ fi
 #Enable Core Control and Disable MSM Thermal Throttling allowing for longer sustained performance
 echo Disabling Aggressive CPU Thermal Throttling
 if [ -e "/sys/module/msm_thermal/core_control/enabled" ]; then
-echo 0 > /sys/module/msm_thermal/core_control/enabled
+echo 1 > /sys/module/msm_thermal/core_control/enabled
 fi
 if [ -e "/sys/module/msm_thermal/parameters/enabled" ]; then
-echo Y > /sys/module/msm_thermal/parameters/enabled
+echo N > /sys/module/msm_thermal/parameters/enabled
 fi
 #Tweak HMP Scheduler to feed the Big cluster more tasks
-sleep 0.2
+sleep 0.3
 echo Tweaking HMP Scheduler for correcting BIG Cluster utilization
 echo 2 > /proc/sys/kernel/sched_window_stats_policy
 echo 90 > /proc/sys/kernel/sched_upmigrate
@@ -219,7 +199,7 @@ else
 	echo ' *Adaptive LMK is not present on your Kernel* '
 fi
 if [ -e "/sys/module/lowmemorykiller/parameters/minfree" ]; then
-	echo 28769,48791,56288,73485,88182,102879 > /sys/module/lowmemorykiller/parameters/minfree
+	echo 23939,44091,58788,73485,88182,102879 > /sys/module/lowmemorykiller/parameters/minfree
 else
 	echo ' *LMK cannot currently be modified on your Kernel* '
 fi
@@ -235,18 +215,14 @@ fi
 
 
 
+#DO NOT powersave GPU
+#Instead I have added some Adreno Idler stuff
 if [ -e "/sys/module/adreno_idler" ]; then
 	echo 'Y' > /sys/module/adreno_idler/parameters/adreno_idler_active
 	echo'10000' > /sys/module/adreno_idler/parameters/adreno_idler_idleworkload
 else
 	echo ' Your Kernel Does not support Adreno IDLER '
 fi
-
-#Tweaking GPU
-sleep 0.1
-echo GPU Tweaking
-echo simple_ondemand > /sys/devices/soc/b00000.qcom,kgsl-3d0/devfreq/b00000.qcom,kgsl-3d0/governor
-
 #Tune Lazyplug	
 if [ -e "/sys/module/lazyplug" ]; then
 	echo '1250' > /sys/module/lazyplug/parameters/cpu_nr_run_theshold
